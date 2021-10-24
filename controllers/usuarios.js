@@ -4,16 +4,29 @@ const bcryptjs = require('bcryptjs')
 const Usuario = require('../models/usuario')
 
 
-const usuariosGet = (req = request,res=response)=>{
-    const { q, nombre = null, apikey, page=1,limit=5 } = req.query
+const usuariosGet = async(req = request,res=response)=>{
+    const { limite = 5, desde = 0 } = req.query;
+    const query = { estado: true }
+
+    // Esto estaria mal porque tardaria mas tiempo...
+    // const usuarios = await Usuario.find(query)
+    //     .skip(Number(desde))
+    //     .limit(Number(limite));
+
+    // const total = await Usuario.countDocuments(query);
+
+    // Mejor utilizar Promise.all... mas eficiente
+    // Si alguna de las 2 esta mal se cancela...
+    const [total, usuarios] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query)
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ])
 
     res.json({
-        msg:'get api - controlador',
-        q,
-        nombre,
-        apikey,
-        page,
-        limit
+        total,
+        usuarios
     })
 }
 
@@ -32,14 +45,21 @@ const usuariosPost = async(req,res=response)=>{
     })
 }
 
-const usuariosPut = (req,res=response)=>{
+const usuariosPut = async(req,res=response)=>{
 
-    const id = req.params.id
+    const { id } = req.params
+    const { _id, password, google, correo, ...resto } = req.body
 
-    res.json({
-        msg:'put api - controlador',
-        id
-    })
+    //TODO validar contra la base de datos
+    if ( password ){
+        //Encriptar la contraseña
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync(password,salt)
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate( id, resto)
+
+    res.json(usuario)
 }
 
 const usuariosDelete = (req,res=response)=>{
