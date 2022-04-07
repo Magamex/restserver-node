@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // const Usuario = require('../models/usuario')
 // const Categoria = require('../models/categoria')
 
-const { Role, Usuario, Categoria } = require('../models');
+const { Role, Usuario, Categoria, Producto } = require('../models');
 
 const esRoleValido = async(rol = '') =>{
     const existeRol = await Role.findOne({rol});
@@ -34,9 +34,17 @@ const existeCategoriaPorId = async(id)=> {
     }
 }
 
+const existeProductoPorId = async(id)=> {
+    const existeProducto = await Producto.findById(id)
+    if (!existeProducto){
+        throw new Error(`El id: ${id}, No existe`)
+    }
+}
+
 module.exports = {
     esRoleValido,
     correoExiste,
     existeUsuarioPorId,
-    existeCategoriaPorId
+    existeCategoriaPorId,
+    existeProductoPorId
 }
