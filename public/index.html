@@ -13,49 +13,16 @@
 
     <button id="google_signout">Cerrar Sesion</button>
 
+    <hr>
+
+    <h1>Login Manual</h1>
+    <form>
+      <input type="email" name="correo" placeholder="correo">
+      <input type="password" name="password" placeholder="password">
+      <button type="submit">Iniciar Sesion</button>
+    </form>
+
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-        function handleCredentialResponse(response) {
-            var url = (window.location.hostname.includes('localhost'))
-                    ?'http://localhost:8080/api/auth/google'
-                    :'http://localhost:8080/api/auth/google';
-
-            const data = { id_token: response.credential }
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type':'application/json' },
-                body: JSON.stringify(data)
-            }).then(resp => resp.json())
-            .then(data => {
-              console.log('Nuestro server',data)
-              localStorage.setItem('email',data.usuario.correo)
-            })
-            .catch(console.log)
-            console.log("Encoded JWT ID token: " + response.credential);
-        }
-
-        const button = document.getElementById('google_signout');
-        button.onclick = () => {
-          console.log(google.accounts.id);
-          google.accounts.id.disableAutoSelect();
-          // Borrar la sesion del correo de gmail
-          google.accounts.id.revoke(localStorage.getItem('email'), done => {
-            localStorage.clear();
-            location.reload();
-          });
-        }
-
-        window.onload = function () {
-          google.accounts.id.initialize({
-            client_id: "450011682165-msqlcp5jb0811g2eqnc12kk682t6h4mi.apps.googleusercontent.com",
-            callback: handleCredentialResponse
-          });
-          google.accounts.id.renderButton(
-            document.getElementById("buttonDiv"),
-            { theme: "outline", size: "large" }  // customization attributes
-          );
-          google.accounts.id.prompt(); // also display the One Tap dialog
-        }
-    </script>
+    <script src="./js/auth.js"></script>
 </body>
 </html>
