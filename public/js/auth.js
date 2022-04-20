@@ -24,7 +24,9 @@ miFormulario.addEventListener('submit', (e) => {
     .then(({msg,token}) => {
         if(msg)
             return console.error(msg);
+
         localStorage.setItem('token', token);
+        window.location = 'chat.html';
     })
     .catch(console.log)
 });
@@ -43,6 +45,7 @@ function handleCredentialResponse(response) {
 
             // console.log('Nuestro server',data)
             localStorage.setItem('email',data.usuario.correo)
+            window.location = 'chat.html';
         })
         .catch(console.log)
         // console.log("Encoded JWT ID token: " + response.credential);

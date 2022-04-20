@@ -103,6 +103,7 @@ const renovarToken = async(req,res=response)=>{
         usuario,
         token
     })
+}
 
 module.exports = {
     login,

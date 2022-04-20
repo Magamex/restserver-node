@@ -7,7 +7,32 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hola Mundo</h1>
+    <div>
+        <h3>Enviar Mensaje</h3>
+        <input type="text" 
+            id="txtUid" 
+            placeholder="uid" 
+            autocomplete="off">
+        <input type="text" 
+            id="txtMensaje" 
+            placeholder="Mensaje" 
+            autocomplete="off">
+
+        <h3>Usuario</h3>
+        <hr>
+        <ul id="ulUsuarios">
+        </ul>
+    </div>
+
+    <div>
+        <h3>Chat Completo</h3>
+        <hr>
+        <ul id="ulMensajes">
+        </ul>
+    </div>
+
+    <button id="btnSalir">Logout</button>
+    
     <script src="./socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
 </body>
